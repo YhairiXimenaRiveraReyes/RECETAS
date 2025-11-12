@@ -1,161 +1,185 @@
-🧩 1️⃣ Verifica que tienes instalado lo necesario
+# MERN - App de Recetas (Cómo ejecutarlo)
 
-Antes de comenzar, asegúrate de tener:
+Este documento explica **cómo ejecutar completamente** la aplicación MERN de recetas, desde instalar dependencias hasta ver el proyecto funcionando.
 
-Requisito	Cómo comprobar
-Node.js (incluye npm)	En la terminal: node -v y npm -v
-MongoDB local o Atlas	Si usas local, asegúrate que el servicio esté corriendo.
-Si usas MongoDB Atlas
-, ten lista tu conexión (MONGO_URI).
-Visual Studio Code (opcional pero recomendado)	Abre tu carpeta del proyecto desde “Archivo → Abrir carpeta”.
-📁 2️⃣ Estructura de carpetas (debe verse así)
+---
+
+## 🧩 1) Preparar el entorno
+
+Asegúrate de tener instalado:
+
+* **Node.js** (versión 16 o superior)
+* **npm** (viene con Node)
+* **MongoDB local** o una cuenta en **MongoDB Atlas**
+
+Verifica con:
+
+```bash
+node -v
+npm -v
+```
+
+Si no tienes MongoDB local, usa Atlas y copia la conexión (`MONGO_URI`).
+
+---
+
+## ⚙️ 2) Instalar dependencias
+
+En tu carpeta raíz `mern-recetas/`, asegúrate de tener las carpetas:
+
+```
 mern-recetas/
 ├─ backend/
-│  ├─ server.js
-│  ├─ /routes
-│  ├─ /models
-│  └─ .env
-│
 └─ frontend/
-   ├─ package.json
-   └─ /src
+```
 
+### 🟢 Backend
 
-Si aún no la tienes así, revisa el documento anterior y asegúrate de haber creado todos los archivos.
-
-⚙️ 3️⃣ Instala las dependencias
-🔹 Backend
-
-Abre una terminal en la carpeta raíz (mern-recetas) y escribe:
-
+```bash
 cd backend
 npm install
+```
 
+Esto instalará `express`, `mongoose`, `cors`, `dotenv`, etc. según el `package.json`.
 
-Esto instalará Express, Mongoose, CORS y Dotenv (si los agregaste en tu package.json).
+### 🟣 Frontend
 
-Si ves un error, revisa que el archivo package.json esté dentro de backend/.
+Desde la raíz del proyecto, entra a la carpeta del cliente:
 
-🔹 Frontend
-
-Abre otra terminal (o usa cd .. para regresar a la raíz) y ejecuta:
-
-cd frontend
+```bash
+cd ../frontend
 npm install
+```
 
+Esto instalará todas las dependencias de React.
 
-Esto instalará las dependencias de React.
+---
 
-🔐 4️⃣ Crea tu archivo .env en el backend
+## 🧰 3) Configurar variables de entorno
 
-Dentro de la carpeta backend, crea un archivo llamado .env (sin nombre adicional) con el siguiente contenido:
+En `backend/`, crea un archivo `.env` (puedes copiar `.env.example`) con tu configuración:
 
+```
 PORT=5000
+MONGO_URI=mongodb+srv://<usuario>:<contraseña>@cluster0.mongodb.net/recetas?retryWrites=true&w=majority
+```
+
+Si usas MongoDB local:
+
+```
 MONGO_URI=mongodb://localhost:27017/recetas
+```
 
+---
 
-Si usas MongoDB Atlas, reemplaza la URI con tu conexión:
+## 🚀 4) Ejecutar el backend
 
-MONGO_URI=mongodb+srv://usuario:contraseña@cluster0.mongodb.net/recetas
+Desde la carpeta `backend/`:
 
-
-Guarda el archivo.
-
-🧠 5️⃣ Inicia el servidor (backend)
-
-Desde tu carpeta backend, ejecuta:
-
-npm start
-
-
-o si tienes nodemon instalado:
-
+```bash
+cd backend
 npm run dev
+```
 
+(Si usas `nodemon`) o simplemente:
 
-Deberías ver en la terminal algo como:
+```bash
+npm start
+```
 
+Si todo está correcto, deberías ver algo como:
+
+```
 Conectado a MongoDB
 Servidor escuchando en puerto 5000
+```
 
+Puedes probar la API abriendo en tu navegador:
+👉 [http://localhost:5000](http://localhost:5000)
 
-✅ Esto significa que tu API está funcionando en:
+Debería mostrar: `API de Recetas funcionando`
 
-http://localhost:5000/
+---
 
+## 💻 5) Ejecutar el frontend
 
-Puedes probar en tu navegador:
+Abre **una nueva terminal** (sin cerrar el backend) y ejecuta:
 
-http://localhost:5000/api/recipes
-
-
-Debería mostrar [] si no hay recetas aún.
-
-🎨 6️⃣ Inicia el cliente (frontend)
-
-Abre otra terminal (sin cerrar la del backend) y ejecuta:
-
+```bash
 cd frontend
 npm start
+```
 
+Esto abrirá la app React en tu navegador, por defecto en:
+👉 [http://localhost:3000](http://localhost:3000)
 
-Esto abrirá tu aplicación en el navegador, normalmente en:
+La app mostrará el formulario para guardar recetas y la lista de recetas guardadas.
 
-http://localhost:3000
+---
 
+## ⚡ 6) Ejecutar ambos al mismo tiempo (opcional)
 
-Deberías ver el título "Mi Libro de Recetas", el formulario para crear recetas y la lista vacía al inicio.
+Desde la raíz `mern-recetas/`, instala `concurrently`:
 
-🚀 7️⃣ Guarda una receta de prueba
-
-En el formulario, escribe por ejemplo:
-
-Nombre: Galletas de chocolate 🍪
-
-Ingredientes: harina, azúcar, mantequilla, chocolate
-
-Instrucciones: Mezclar todo, hornear 20 min.
-
-Presiona “Guardar receta”.
-
-Si todo funciona, verás el mensaje “Receta guardada con éxito” y aparecerá en la lista de abajo.
-
-🔄 8️⃣ Ejecutar ambos al mismo tiempo (opcional pero útil)
-
-Si no quieres abrir dos terminales, puedes usar concurrently en la raíz.
-
-Desde la carpeta raíz (mern-recetas/), ejecuta:
-
+```bash
 npm init -y
 npm install -D concurrently
+```
 
+Agrega este script en el `package.json` de la raíz:
 
-Luego, abre o crea un package.json en la raíz con este script:
-
+```json
 "scripts": {
   "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\""
 }
+```
 
+Luego ejecuta:
 
-Y ahora, con un solo comando:
-
+```bash
 npm run dev
+```
 
+Esto levantará **backend y frontend al mismo tiempo**.
 
-Esto iniciará backend + frontend a la vez 😎.
+---
 
-💡 9️⃣ Posibles errores y soluciones rápidas
-Error	Causa posible	Solución
-Error: Cannot find module 'express'	No instalaste dependencias	Corre npm install en backend
-MongoNetworkError	MongoDB no está encendido	Asegúrate que Mongo corra (mongod) o usa Atlas
-CORS	React no puede conectar con backend	En backend/server.js asegúrate de usar app.use(cors())
-fetch failed	API caída o URL incorrecta	Revisa que el backend esté en puerto 5000
-🧁 10️⃣ ¡Listo! 🎉
+## 🧠 7) Verificando la conexión
 
-Tu aplicación ahora debería funcionar perfectamente:
+Cuando agregues una receta desde el formulario, debería enviarse al backend y guardarse en MongoDB. Si ves tu receta listada debajo del formulario, ¡todo funciona! 😺
 
-Guarda recetas desde el formulario.
+Si quieres verificar manualmente:
 
-Las lista automáticamente debajo.
+* Abre [http://localhost:5000/api/recipes](http://localhost:5000/api/recipes)
+* Deberías ver un arreglo JSON con tus recetas.
 
-Puedes cerrar y volver a abrir, y las recetas seguirán guardadas en tu base de datos.
+---
+
+## 🧯 8) Errores comunes y soluciones
+
+| Error                              | Posible causa                                  | Solución                                                                       |
+| ---------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------ |
+| `MongooseError: failed to connect` | URI incorrecta o Mongo no en ejecución         | Revisa `.env` o abre MongoDB Compass para verificar conexión                   |
+| `CORS error`                       | Peticiones bloqueadas entre frontend y backend | Asegúrate de usar `app.use(cors())` en `server.js` y que los puertos coincidan |
+| `fetch failed` o `404`             | Ruta API incorrecta                            | Verifica que el frontend apunte a `http://localhost:5000/api/recipes`          |
+| `Port already in use`              | Puerto ocupado                                 | Cambia el `PORT` en `.env` o cierra procesos anteriores                        |
+
+---
+
+## ✅ 9) Comprobación final
+
+Si ambos servidores están funcionando:
+
+* **Backend:** [http://localhost:5000](http://localhost:5000)
+* **Frontend:** [http://localhost:3000](http://localhost:3000)
+
+Y si el formulario guarda correctamente recetas, ¡ya tienes tu app MERN completa funcionando! 🎉
+
+---
+
+## 🌱 10) Siguientes pasos sugeridos
+
+* Añadir funciones para editar y borrar recetas.
+* Crear un sistema de usuarios (registro/login).
+* Mejorar diseño con **TailwindCSS** o **Material UI**.
+* Subir el proyecto a GitHub y desplegarlo en **Render**, **Vercel** o **Railway**.
